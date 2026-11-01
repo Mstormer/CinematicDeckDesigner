@@ -24,6 +24,7 @@ Build a deck first: `cd <copy> && python3 -I assemble.py out/mark4.html`.
 | snd.js | `node snd.js <deck.html> <out.json>` | sound log, the sacred slide's silence, master peak, flush | 1 on failure |
 | tool.js | `node tool.js <deck.html> <outdir>` | presenter toolkit end to end | 1 on failure |
 | sv.js | `node sv.js <deck.html> <outdir>` | speaker view: panel toggles, sizing, running script, notes editing | 1 on failure |
+| save.js | `node save.js <deck.html> <outdir>` | Save remembers the deck's file, Save as… makes a copy | 1 on failure |
 | phone.js | `node phone.js <deck.html> <outdir>` | phone portrait and landscape, touch | 1 on failure |
 | rm.js | `node rm.js <deck.html> <outdir>` | reduced motion: every step still after 1.5 s | 1 if any moves |
 | words.py | `python3 -I words.py <a.html> <b.html>` | on-screen wording and notes identical | 1 on a difference |
@@ -99,6 +100,15 @@ slide 3 with builds.
 6. Edit notes: one box per build, focused; arrow keys type; Cmd/Ctrl+Enter saves into the slide's `.notes` and the edit state
    with the builds kept; Esc cancels; changing slide mid-edit saves; `buildDoc()` carries the edit; it survives a reload.
 7. On the last slide the Next preview is the end card and no later slides remain in the script.
+
+## save.js
+
+Saving from `reference/deck-save.js`, with `showSaveFilePicker` stubbed to hand back a plain, storable handle (the write methods
+sit on the prototype, so IndexedDB can keep it) and every write captured.
+1. Before a file is chosen the Save button reads "Save"; the first Save asks once, suggesting the page's own file name, and writes.
+2. A second Save writes without asking; the button reads "Save to <file>".
+3. Save as… asks for "<name> copy.html" and writes there; Save still writes to the first file.
+4. After a reload the deck still knows its file: the button reads "Save to <file>" and Save writes without asking.
 
 ## phone.js
 

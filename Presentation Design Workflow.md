@@ -126,7 +126,8 @@ Presenter toolkit (all built in):
   double-click any word in my notes to make it a cue.
 - Timing panel: per-slide target times and auto-advance from my speaking pace.
 - Editor (E): edit any text in place, drag and resize elements (A−/A+ or Alt+−/Alt+= by 5%), global and per-slide
-  animation speed, then save back into the same HTML file (with a download fallback).
+  animation speed. Save uses the skill's reference/deck-save.js unchanged: after one file pick
+  it remembers the deck's own file and writes straight back; Save as… writes a copy.
 Name the file "<Talk title> - <World name>.html" in the folder I give you. Never overwrite
 an existing file; new versions get new names. Don't publish it anywhere.
 

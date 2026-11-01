@@ -26,7 +26,8 @@
      winName           window name for window.open
      paint(doc, box, i, upTo)  draw slide i with builds up to upTo into box inside a preview frame's document (optional; the
                        default clones the slide, adds "on", and marks [data-step] elements "shown")
-     snap()            a Promise of an image URL of the live screen, laid over the Now preview once it settles (optional)
+     snap()            a Promise of an image URL of the live screen, laid over the Now preview 1.2 s after each change and
+                       refreshed every 2.5 s (each try gives up after 2 s) (optional)
      previewHTML       extra markup for each preview frame's body, such as shared SVG <defs> (optional)
 */
 function makeSpeaker(A) {
@@ -67,7 +68,7 @@ body.dragging,body.dragging *{user-select:none;cursor:col-resize!important}body.
   const fmtT = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
   // static slide previews: a copy of the slide's text and layout (and, if the deck can take one, a still of the live screen once it settles)
   let pvKey = '', pvSnapT, deckCSS = null;
-  const PVCSS = `html,body{margin:0;height:100%;overflow:hidden;background:var(--bg,#0B0B0B)}#ps{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden}#ps>img{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .4s}#ps>img.on{opacity:1}#ps .slide{transition:none!important}#ps *,#ps *::before,#ps *::after{animation-delay:-60s!important;animation-iteration-count:1!important;transition:none!important}#ps .caret,#ps .notes{display:none!important}`;
+  const PVCSS = `html,body{margin:0;height:100%;overflow:hidden;background:var(--bg,#0B0B0B)}#ps{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden}#ps>img{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .4s}#ps>img.on{opacity:1}#ps .slide{transition:none!important}#ps *,#ps *::before,#ps *::after{animation-delay:-60s!important;animation-iteration-count:1!important;transition:none!important}#ps .caret,#ps .notes{display:none!important}#ps .ch{opacity:1!important}`;
   function pvDoc(f) { const d = f.contentDocument; if (d.getElementById('ps')) return d;
     deckCSS = deckCSS || [...document.querySelectorAll('style')].map(s => s.textContent).join('\n');
     d.open(); d.write(`<!doctype html><html><head><meta charset="utf-8"><style>${deckCSS}</style><style>${PVCSS}</style></head><body>${A.previewHTML || ''}<div id="ps"><img alt=""><div id="sl"></div></div></body></html>`); d.close(); fitPv(f); return d; }
@@ -87,7 +88,10 @@ body.dragging,body.dragging *{user-select:none;cursor:col-resize!important}body.
     const more = step < A.maxStep(s), ni = more ? cur : cur + 1, ns = slides[ni];
     d.getElementById('pnl').innerHTML = more ? 'Next · <b>build on this slide</b>' : ns ? `Next slide · <b>${esc(title(ns))}</b>` : 'Next';
     paint(d.getElementById('pnext'), ni, more ? step + 1 : 0, null);
-    clearTimeout(pvSnapT); pvSnapT = setTimeout(() => A.snap && A.snap().then(url => { if (url && open() && pvKey === key) { const f = w.document.getElementById('pnow'), im = pvDoc(f).querySelector('#ps>img'); im.src = url; im.classList.add('on'); } }), 2200);
+    // keep the "on screen now" picture current: first still soon after the change, then refreshed every 2.5 s until the next change
+    clearTimeout(pvSnapT); const shoot = () => { if (!open() || pvKey !== key) return; if (!svp.now || !A.snap) { pvSnapT = setTimeout(shoot, 2500); return; }
+      Promise.race([A.snap(), new Promise(r => setTimeout(() => r(null), 2000))]).then(url => { if (url && open() && pvKey === key) { const f = w.document.getElementById('pnow'); paint(f, cur, step); const im = pvDoc(f).querySelector('#ps>img'); im.src = url; im.classList.add('on'); } }).catch(() => {}).finally(() => { if (open() && pvKey === key) pvSnapT = setTimeout(shoot, 2500); }); };
+    pvSnapT = setTimeout(shoot, 1200);
   }
   // which panels show, and the notes size; kept per browser
   const svp = Object.assign({ cues: true, notes: true, now: true, next: true, fs: 22, lay: 'r', ph: 0, pw: 0, nh: 0, nw: 0, xw: 0 }, (() => { try { return JSON.parse(localStorage.getItem(A.prefsKey) || '{}'); } catch (e) { return {}; } })());

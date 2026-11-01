@@ -11,9 +11,10 @@ One talk, one world. You turn the user's manuscript into a single self-contained
 
 **Reference material** is in `reference/` next to this file:
 - `private/` (optional, never committed): a reference deck's source and build script, if you keep one locally. Reuse its presenter toolkit and study its motion code.
-- `tests/kit/`: the current check kit (layout, motion frames, seams, window sizes, perf, sound walk, sync, toolkit, speaker view, phone, reduced motion, contrast, projector simulation, QR, wording).
+- `tests/kit/`: the current check kit (layout, motion frames, seams, window sizes, perf, sound walk, sync, toolkit, speaker view, saving, phone, reduced motion, contrast, projector simulation, QR, wording).
 - `engine-notes.md`: hard-won rules. **Read it before building.**
 - `speaker-view.js`: the speaker view every deck uses, pasted in unchanged (see Stage 5).
+- `deck-save.js`: saving the deck back into its own file, pasted in unchanged (see Stage 5).
 
 Work in the stages below. Stop and wait for the user only where it says **WAIT**. Ask questions in plain chat (or with AskUserQuestion when it is available), each with 2–4 options and your recommendation first.
 
@@ -140,7 +141,7 @@ Pick typefaces that fit the world, not a house default.
   - a number then Enter jumps to that slide;
   - O overview, N notes, M sound, F fullscreen, B blank;
   - S speaker view in a second window (below).
-- **Speaker view (S): use `reference/speaker-view.js` unchanged.** Paste the `makeSpeaker` function into the deck's script and create it once with the adapter its header comment lists (slides, current slide and build, cue words, `markCues`, voice and auto-build state, next/prev, the deck's key handler, `setNotes`, a refresh, a preferences key, and optionally a preview painter, a live-screen snapshot and shared SVG defs). Call `speaker.sync()` from the deck's update, `speaker.status(bits, nx, held, hear)` from the voice renderer, and `speaker.toast()` from the deck's toast; set `speaker.voiceAt = performance.now()` while a voice result is handled (0 afterwards). Don't restyle or rewrite it: every deck gets the same speaker view. What it does:
+- **Speaker view (S): use `reference/speaker-view.js` unchanged.** Paste the `makeSpeaker` function into the deck's script and create it once with the adapter its header comment lists (slides, current slide and build, cue words, `markCues`, voice and auto-build state, next/prev, the deck's key handler, `setNotes`, a refresh, a preferences key, and optionally a preview painter, a live-screen snapshot that keeps the Now preview current, and shared SVG defs). Call `speaker.sync()` from the deck's update, `speaker.status(bits, nx, held, hear)` from the voice renderer, and `speaker.toast()` from the deck's toast; set `speaker.voiceAt = performance.now()` while a voice result is handled (0 afterwards). Don't restyle or rewrite it: every deck gets the same speaker view. What it does:
   - a second window with the notes, a status line, a one-line "Heard:" transcript while voice listens, and Now and Next previews; a compact toolbar runs along the bottom: `n/N` (the title as its tooltip), the panel buttons, ← and →, the talk timer (click it to restart) and the clock;
   - **Notes, Now, Next** switch each panel on or off; **A− / A+** size the notes (14–48 px); the **layout button** moves the previews right, bottom, left, top or hides them; drag the bar between notes and previews (almost the whole window) or a preview's corner; **Reset sizes**; all remembered in that browser;
   - the notes are one running script that glides as the presenter moves (about 450 ms; 1.5 s when a spoken cue moved it): earlier slides grey, the current part lit with a brief gold flash, the next two lines full, then fading; laid out like printed presenter notes (a main bullet, shorter follow-ons indented, a red > on each slide title and build with [click] / [build on cue] / [builds at N s] tags, [pause] and stage directions in grey italics);
@@ -151,7 +152,7 @@ Pick typefaces that fit the world, not a house default.
 - **Editor (E):**
   - edit any text in place, and drag or resize elements; beside the size control, A− / A+ (and Alt+− / Alt+=) change the selection by 5%, and the label reads "Text size" for a single text element;
   - global and per-slide animation speed, which also scales the timers;
-  - Save writes back into the same HTML file, falling back to a download;
+  - **Save uses `reference/deck-save.js` unchanged** (`makeSaver` with its adapter): the first Save asks once for the deck's own file and the deck remembers it in that browser, so every later Save, even after a reload, writes straight back; the button reads "Save", then "Save to <file>"; a **Save as…** button writes a copy without changing where Save goes; a browser that can't write files downloads a copy;
   - a working copy is kept in localStorage.
 - **`window.__deck` API:** `go`, `next`, `prev`, `cur`, `step`, `busy`, `N`, `settle`, `hear`. The tests depend on it.
 
