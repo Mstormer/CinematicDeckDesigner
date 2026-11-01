@@ -30,3 +30,9 @@ In Claude Code, type `/cinematic-deck-designer` and attach your manuscript or ou
   - `tests/kit/`: the Playwright check kit (layout, motion frames, seams, window sizes, frame pacing, sound walk, audio-picture sync, presenter toolkit, phone, reduced motion, contrast, projector simulation, QR, wording). Copy it into your project's `tools/` and run `npm i`.
   - `private/` (optional, never committed): your own reference deck and quality bar, if you keep one.
 - `Presentation Design Workflow.md`: the same workflow as a paste-in prompt, for use without installing the skill.
+
+## License
+
+[PolyForm Noncommercial 1.0.0](LICENSE.md). You may use, copy and change this skill for any noncommercial purpose: personal use, study, research, hobby projects, and use by charities, schools, churches and other noncommercial organizations. Commercial use, including selling the skill or a changed version of it, needs a separate license from the author. This is source-available software, not open source.
+
+Required Notice: Copyright (c) 2026 Mstormer (https://github.com/Mstormer)
