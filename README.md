@@ -18,6 +18,11 @@ git clone https://github.com/Mstormer/CinematicDeckDesigner.git
 ln -s "$PWD/CinematicDeckDesigner/cinematic-deck-designer" ~/.claude/skills/cinematic-deck-designer
 ```
 
+## Requirements
+
+- **Free disk space: about 25 GB** while a deck is being built and checked. Check rounds write thousands of screenshots and frames (one deck reached 20 GB). The skill warns you at the start if less than 10 GB is free, keeps check rounds lean, and moves the throwaway files to the Trash when the deck is done, so the space comes back once you empty it. The finished deck itself is one HTML file of about 1 MB.
+- Google Chrome, plus Node.js for the check kit (Playwright).
+
 ## Use
 
 In Claude Code, type `/cinematic-deck-designer` and attach your manuscript or outline. You can also just ask for an impressive custom presentation.
