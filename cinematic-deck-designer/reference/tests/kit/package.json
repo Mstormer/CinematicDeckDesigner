@@ -1,0 +1,6 @@
+{
+  "name": "deck-check-kit",
+  "private": true,
+  "description": "Headless checks for a cinematic deck. Install with: npm i",
+  "dependencies": { "playwright": "^1.64.1", "jsqr": "^1.4.0", "pngjs": "^7.0.0" }
+}
