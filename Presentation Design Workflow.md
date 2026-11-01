@@ -142,6 +142,11 @@ Run the deck in headless Chrome (Playwright) and fix what you find before showin
 - Goals pass: go through the deck as the audience in the brief would. Does every chapter
   move them toward the "to"? Is the memorable sentence on screen at the right moment? Is
   the call to action unmissable and easy to act on from a seat? Fix anything that doesn't.
+Clean up: report the throwaway files this build left (check screenshots, raw frames, temporary
+browser profiles, working copies) with their sizes, keep the sources, tools, latest build and
+final contact sheets, and move the rest to the Trash. Never touch other projects' files.
+Keep check runs lean while working: reuse one folder per round, trash raw frames once their
+contact sheet is reviewed, and clean up first if free disk space drops under about 15 GB.
 Then give me: the open command, a 5-line tour of what to watch for, the keys, and what you
 could not test (projector, real microphone, the presenting laptop).
 

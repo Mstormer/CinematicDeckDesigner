@@ -111,7 +111,10 @@ Produce one self-contained `.html` file that works offline:
 - fonts embedded as base64;
 - no CDN and no frameworks.
 
-**Work in a lasting project folder,** such as `~/Documents/CCode/<Talk>`: source parts, a small `build.py` that embeds fonts, icons, notes, cues and any images, the test kit, and the built output. Never keep sources only in the session scratchpad or `/private/tmp`, because a restart wipes them. Use the scratchpad only for screenshots and other throwaway output. Before long runs, check free disk space (`df -h`); screenshot runs can use tens of GB.
+**Work in a lasting project folder,** such as `~/Documents/CCode/<Talk>`: source parts, a small `build.py` that embeds fonts, icons, notes, cues and any images, the test kit, and the built output. Never keep sources only in the session scratchpad or `/private/tmp`, because a restart wipes them. Use the scratchpad only for screenshots and other throwaway output. Check runs fill the disk fast (one deck left 20 GB of frames), so keep them lean while you work:
+- each check round writes into one folder per round and reuses it;
+- move raw frames to the Trash once their contact sheet is made and reviewed;
+- before a round, check free space (`df -h`); under about 15 GB free, clean up first.
 
 For anything bigger than a few slides, split the source into owned parts (world, motion, sound, type) that `build.py` joins in a fixed order, so parallel agents never edit the same file. Long jobs keep a `progress.log` after each task, so a step cut off by a usage limit or a restart can resume.
 
@@ -177,6 +180,12 @@ Run the deck in headless Chrome with Playwright (`channel:'chrome'`, viewport 19
   - Does every chapter move them toward the "to"?
   - Does the memorable sentence land on screen at the right moment?
   - Is the call to action unmissable, and easy to act on from a seat?
+
+**Clean up** after delivery, once the user has the deck:
+- Report what the build left behind, with sizes (`du -sh`): check screenshots and raw frames in the scratchpad, Playwright's temporary browser profiles (`$TMPDIR/playwright_chromiumdev_profile-*`), and fixers' working copies and old source backups in the project folder.
+- Keep the source parts, the test kit, the latest build and the final contact sheets (copy those into the project's `notes/`).
+- Move the throwaway parts to the Trash (`/usr/bin/trash`), never `rm`. Touch only this deck's own files: never other sessions' scratch or shared temp; report those, with the command, instead.
+- Tell the user how much went to the Trash, and that the space comes back when they empty it.
 
 Then give the user:
 - the open command;
