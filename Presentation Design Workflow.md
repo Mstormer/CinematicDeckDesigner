@@ -23,6 +23,9 @@ If I haven't attached it, ask for it and WAIT. Don't invent the talk. An outline
 keep speaker notes in my own words wherever they exist. Every on-screen word, above all the
 call to action, comes from my material; mark any phrase you wrote yourself as DRAFTED in the
 storyboard so I can approve it.
+Check free disk space first. If under 10 GB is free, warn me: building and checking a deck
+needs about 25 GB free (check rounds can write 20 GB of screenshots), and runs can fail or
+fill the disk with less. If I go on anyway, keep check rounds small and tell me what you cut.
 
 ━━ STAGE 1 · READ THE TALK ━━
 Read everything I attached. Before asking anything, write a short diagnosis:

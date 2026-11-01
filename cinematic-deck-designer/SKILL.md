@@ -23,6 +23,7 @@ The user must supply the content. This can be a manuscript, script, outline, not
 - An outline is enough. Note which parts you will draft on-screen words for, and keep the speaker notes in the user's own words wherever they exist.
 - **Every on-screen word comes from the user's material.** That matters most for the call to action and the closing lines. A phrase you write yourself, even a short one like "confess it" or "stay home", is marked *drafted* in the storyboard and needs the user's OK. Never let an invented phrase reach the build unmarked.
 - Also ask where the finished file should go, unless it is obvious. The default is the folder the source came from.
+- **Check free disk space** (`df -h ~`). If less than 10 GB is free, warn the user before going on. Building and checking a deck needs about **25 GB free**: check rounds write thousands of screenshots and frames (one deck reached 20 GB), on top of Chrome, Playwright and the project. With less, runs can fail partway or fill the disk. Suggest emptying the Trash or clearing old build files. If the user wants to go on anyway, keep every check round small (fewer frames, trash each round's frames as soon as its sheet is reviewed) and say which checks were cut.
 
 ## Stage 1 · Read the talk
 
