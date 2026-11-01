@@ -32,7 +32,8 @@ In Claude Code, type `/cinematic-deck-designer` and attach your manuscript or ou
 - `cinematic-deck-designer/SKILL.md`: the workflow, from getting the talk and setting goals through world pitches, storyboard, build and checks.
 - `cinematic-deck-designer/reference/`:
   - `engine-notes.md`: build rules learned the hard way;
-  - `tests/kit/`: the Playwright check kit (layout, motion frames, seams, window sizes, frame pacing, sound walk, audio-picture sync, presenter toolkit, phone, reduced motion, contrast, projector simulation, QR, wording). Copy it into your project's `tools/` and run `npm i`.
+  - `speaker-view.js`: the speaker view module every deck uses unchanged;
+  - `tests/kit/`: the Playwright check kit (layout, motion frames, seams, window sizes, frame pacing, sound walk, audio-picture sync, presenter toolkit, speaker view, phone, reduced motion, contrast, projector simulation, QR, wording). Copy it into your project's `tools/` and run `npm i`.
   - `private/` (optional, never committed): your own reference deck and quality bar, if you keep one.
 - `Presentation Design Workflow.md`: the same workflow as a paste-in prompt, for use without installing the skill.
 

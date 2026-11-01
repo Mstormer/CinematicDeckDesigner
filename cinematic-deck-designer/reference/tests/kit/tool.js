@@ -1,8 +1,8 @@
 // usage: node tool.js <deck.html> <outdir>
 // The presenter toolkit, end to end, headless:
-//  1 speaker view: S opens it; it mirrors the slide on stage (title, "Slide n of N", the Now preview) and follows next()
+//  1 speaker view: S opens it; it mirrors the slide on stage ("n/N" with the title as its tooltip, the Now preview) and follows next()
 //  2 cue words: __deck.hear(<a build's cue word>) brings that build in; at the last build, the next slide's cue word moves on
-//  3 timing: T opens the timing panel with a target for every slide; the speaker view shows "This slide m:ss of m:ss"
+//  3 timing: T opens the timing panel with a target for every slide; targets show in the panel
 //  4 editor: E, select a text block, resize it and retype it, Save (showSaveFilePicker is stubbed to capture the file)
 //    -> edited.html in outdir; opened fresh (no localStorage), the edits are there; the saved file passes a syntax check
 //  5 speed: the editor's global speed at 0.5x and 2x stretches and shrinks a flight's duration (busy time)
@@ -27,15 +27,14 @@ const STUB = () => { window.showSaveFilePicker = async o => ({ name: 'captured.h
     ok(!!sv, 'S opens the speaker view');
     if (sv) {
       await sv.setViewportSize({ width: 1440, height: 880 });
-      const read = () => sv.evaluate(() => ({ t: document.getElementById('svt').textContent, c: document.getElementById('svc').textContent, now: (document.querySelector('#svnow .slide') || { dataset: {} }).dataset.title, notes: document.getElementById('svn').textContent.length, tg: document.getElementById('svtg').textContent }));
+      const read = () => sv.evaluate(() => { const f = document.getElementById('pnow'), sl = f && f.contentDocument && f.contentDocument.querySelector('.slide'); return { t: document.getElementById('ti').textContent, c: document.getElementById('ti').title, now: sl ? sl.dataset.title : '', notes: document.getElementById('nt').textContent.length }; });
       await L.settle(page, 2, 600); await L.sleep(1300);
       let r = await read();
-      ok(r.now === S[2].title && r.t === S[2].title && /Slide 3 of/.test(r.c) && r.notes > 20, `speaker view mirrors slide 3 (${r.now}, "${r.c}", notes ${r.notes} chars)`);
-      ok(/This slide \d+:\d\d of \d+:\d\d/.test(r.tg), `speaker view shows the slide target ("${r.tg}")`);
+      ok(r.now === S[2].title && r.t === `3/${S.length}` && r.c === S[2].title && r.notes > 20, `speaker view mirrors slide 3 (${r.now}, "${r.t} ${r.c}", notes ${r.notes} chars)`);
       await sv.screenshot({ path: L.path.join(out, 'tool-speaker.png') });
       await page.evaluate(() => window.__deck.next()); await L.idle(page); await L.sleep(500);
       r = await read(); const cur = await page.evaluate(() => [window.__deck.cur, window.__deck.step]);
-      ok(r.now === S[cur[0]].title && r.c.includes(`Slide ${cur[0] + 1} of`), `speaker view follows next() (${r.now}, "${r.c}")`);
+      ok(r.now === S[cur[0]].title && r.t === `${cur[0] + 1}/${S.length}` && r.c === S[cur[0]].title, `speaker view follows next() (${r.now}, "${r.t}")`);
     }
     // cue words: the first slide with builds and cues after the cover
     const cueS = await page.evaluate(() => [...document.querySelectorAll('#slides > .slide')].map((s, i) => ({ i, b: (s.querySelector('[data-step="1"][data-cue]') || s.querySelector('[data-step="1"]') || {}).dataset?.cue || '', max: window.__deck.maxStep(i) })).filter(x => x.i > 0 && x.b && x.max >= 1));

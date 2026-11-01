@@ -23,6 +23,7 @@ Build a deck first: `cd <copy> && python3 -I assemble.py out/mark4.html`.
 | qrread.js | `node qrread.js <png> [x,y,w,h]` | decodes a QR (jsqr), optional crop | 1 if none |
 | snd.js | `node snd.js <deck.html> <out.json>` | sound log, the sacred slide's silence, master peak, flush | 1 on failure |
 | tool.js | `node tool.js <deck.html> <outdir>` | presenter toolkit end to end | 1 on failure |
+| sv.js | `node sv.js <deck.html> <outdir>` | speaker view: panel toggles, sizing, running script, notes editing | 1 on failure |
 | phone.js | `node phone.js <deck.html> <outdir>` | phone portrait and landscape, touch | 1 on failure |
 | rm.js | `node rm.js <deck.html> <outdir>` | reduced motion: every step still after 1.5 s | 1 if any moves |
 | words.py | `python3 -I words.py <a.html> <b.html>` | on-screen wording and notes identical | 1 on a difference |
@@ -69,8 +70,8 @@ against wall time and prints it. The JSON has every step with its calls (time fr
 ## tool.js
 
 1. `window.__deck` has go, next, prev, cur, step, busy, N, settle, hear, standby, sound.
-2. S opens the speaker view (a popup); it mirrors the slide on stage (title, "Slide n of N", the Now preview's slide, notes)
-   and follows `next()`; it shows "This slide m:ss of m:ss".
+2. S opens the speaker view (a popup); it mirrors the slide on stage ("n/N" with the title as its tooltip, the Now preview's slide, notes)
+   and follows `next()`.
 3. Cue words: on the first slide after the cover with a build cue, `__deck.hear(<running transcript>)` with the build's cue
    word brings build 1; at the last build, after 2.5 s, the next slide's cue word moves on. The transcript is cumulative, as
    Chrome's speech recognition delivers it.
@@ -80,6 +81,24 @@ against wall time and prints it. The JSON has every step with its calls (time fr
    jscheck, and opened in a fresh context (no localStorage) the retyped text and the 1.3 scale must be there.
 6. Speed: the editor's global speed at 0.5x and 2x, each in a fresh context; the busy time of the first flight between parts
    (fear to split in The Mark 3) must scale by about 2 and 0.5.
+
+## sv.js
+
+The speaker view from `reference/speaker-view.js`. Needs `window.__deck` with go, settle, busy, `state()` and `buildDoc()`, and
+slide 3 with builds.
+1. Every combination of the three toggles (`button.tg`: Notes, Now, Next) at 1440x880, 1024x700 and 1920x1080: each hides only
+   its own panel, shown panels keep a usable size, the preview frames are rescaled, nothing scrolls sideways; with voice off the
+   cue box is hidden and the status line shows.
+2. A+ / A− change the notes size by 2 px a step; the size is kept after reopening.
+3. The layout button cycles the previews right, bottom, left, top, hidden and back; the toolbar sits under everything.
+4. The script holds every slide (`.old`, `.cur-s`, `.fut`), the current part sits in the top 30%, later text is at 50% with a
+   `--cut` set, cues are green on the current slide and red later, the status line is filled, the toolbar shows `n/N` with the
+   title as its tooltip, the script glides to the next slide with in-between positions and scrolls back, and a move caused by a
+   spoken cue (`__deck.hear`) is under 25% of the way at 280 ms where a click's is over 50%.
+5. Dragging the bar widens the previews by 500 px or more, the width is kept, Reset sizes restores it.
+6. Edit notes: one box per build, focused; arrow keys type; Cmd/Ctrl+Enter saves into the slide's `.notes` and the edit state
+   with the builds kept; Esc cancels; changing slide mid-edit saves; `buildDoc()` carries the edit; it survives a reload.
+7. On the last slide the Next preview is the end card and no later slides remain in the script.
 
 ## phone.js
 

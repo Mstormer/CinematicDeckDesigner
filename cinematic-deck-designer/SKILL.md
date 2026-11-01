@@ -11,8 +11,9 @@ One talk, one world. You turn the user's manuscript into a single self-contained
 
 **Reference material** is in `reference/` next to this file:
 - `private/` (optional, never committed): a reference deck's source and build script, if you keep one locally. Reuse its presenter toolkit and study its motion code.
-- `tests/kit/`: the current check kit (layout, motion frames, seams, window sizes, perf, sound walk, sync, toolkit, phone, reduced motion, contrast, projector simulation, QR, wording).
+- `tests/kit/`: the current check kit (layout, motion frames, seams, window sizes, perf, sound walk, sync, toolkit, speaker view, phone, reduced motion, contrast, projector simulation, QR, wording).
 - `engine-notes.md`: hard-won rules. **Read it before building.**
+- `speaker-view.js`: the speaker view every deck uses, pasted in unchanged (see Stage 5).
 
 Work in the stages below. Stop and wait for the user only where it says **WAIT**. Ask questions in plain chat (or with AskUserQuestion when it is available), each with 2–4 options and your recommendation first.
 
@@ -133,16 +134,22 @@ Pick typefaces that fit the world, not a house default.
 - **Sound as a mix, not a list of effects:** one acoustic space, stereo placement that follows the picture, a level arc that peaks at the climax, quiet transitions under the set pieces, a soft-clip safety stage, and sounds that land on the picture's contact frame, within about 2 frames. Sacred moments are digital silence.
 - **Budgets:** every transport and set piece at p95 ≤ 18 ms per frame with ≤ 2% of frames over 20 ms, planned for an Iris Xe class laptop GPU, with the file under about 2 MB. No `ctx.filter`, `shadowBlur` or live `getImageData` at runtime; bake heavy textures in idle slices. Every animation has a static end state (`.settled * {animation:none; transition:none}`).
 
-**The presenter toolkit** is required. If a reference deck sits in `reference/private/`, adapt its toolkit rather than rewriting it; `engine-notes.md` says where each piece lives in a deck like it. Otherwise build it to this spec.
+**The presenter toolkit** is required. The speaker view always comes from `reference/speaker-view.js`. For the rest, if a reference deck sits in `reference/private/`, adapt its toolkit rather than rewriting it; `engine-notes.md` says where each piece lives in a deck like it. Otherwise build it to this spec.
 - **Keys:**
   - → / space / clicker: builds, then slides; ← goes back;
   - a number then Enter jumps to that slide;
   - O overview, N notes, M sound, F fullscreen, B blank;
-  - S speaker view in a second window, showing the current slide, the next slide, notes and a timer.
+  - S speaker view in a second window (below).
+- **Speaker view (S): use `reference/speaker-view.js` unchanged.** Paste the `makeSpeaker` function into the deck's script and create it once with the adapter its header comment lists (slides, current slide and build, cue words, `markCues`, voice and auto-build state, next/prev, the deck's key handler, `setNotes`, a refresh, a preferences key, and optionally a preview painter, a live-screen snapshot and shared SVG defs). Call `speaker.sync()` from the deck's update, `speaker.status(bits, nx, held, hear)` from the voice renderer, and `speaker.toast()` from the deck's toast; set `speaker.voiceAt = performance.now()` while a voice result is handled (0 afterwards). Don't restyle or rewrite it: every deck gets the same speaker view. What it does:
+  - a second window with the notes, a status line, a one-line "Heard:" transcript while voice listens, and Now and Next previews; a compact toolbar runs along the bottom: `n/N` (the title as its tooltip), the panel buttons, ← and →, the talk timer (click it to restart) and the clock;
+  - **Notes, Now, Next** switch each panel on or off; **A− / A+** size the notes (14–48 px); the **layout button** moves the previews right, bottom, left, top or hides them; drag the bar between notes and previews (almost the whole window) or a preview's corner; **Reset sizes**; all remembered in that browser;
+  - the notes are one running script that glides as the presenter moves (about 450 ms; 1.5 s when a spoken cue moved it): earlier slides grey, the current part lit with a brief gold flash, the next two lines full, then fading; laid out like printed presenter notes (a main bullet, shorter follow-ons indented, a red > on each slide title and build with [click] / [build on cue] / [builds at N s] tags, [pause] and stage directions in grey italics);
+  - cues on the current slide and its builds are green (underlined once used), cues on later slides red;
+  - **Edit notes** turns the current slide's script into one editable box per build: Ctrl/Cmd+Enter saves, Esc cancels, keys type rather than change slides, changing slide saves first, and the edit goes into the deck's edit state so Save writes it into the file; double-click a word to add or drop a cue.
 - **Voice cues:** Web Speech advances a build when its cue word is heard. Double-clicking a word in the notes or speaker view toggles it as a cue.
 - **Timing panel:** a target time for each slide, plus auto-advance from the speaking pace.
 - **Editor (E):**
-  - edit any text in place, and drag or resize elements;
+  - edit any text in place, and drag or resize elements; beside the size control, A− / A+ (and Alt+− / Alt+=) change the selection by 5%, and the label reads "Text size" for a single text element;
   - global and per-slide animation speed, which also scales the timers;
   - Save writes back into the same HTML file, falling back to a download;
   - a working copy is kept in localStorage.
@@ -159,7 +166,7 @@ Run the deck in headless Chrome with Playwright (`channel:'chrome'`, viewport 19
 - **Errors and layout:** zero console or page errors. Every fully built slide sits inside safe margins with no overlaps or text overflow.
 - **Frames:** screenshot every slide, plus 4–6 frames of each transport and signature moment. Review them as contact sheets made with `tests/kit/sheet.py`, and fix anything awkward, empty or flickering. Look at the images yourself, critically.
 - **Swaps and seams:** hold the frame before and after every landing where a moving object is replaced by a copy, and compare them: no change in colour, size or angle. Look for lines in the sky and ground (`seams.js`) on every slide settled and during each arrival and camera move, at several window sizes (`aspect.js`).
-- **Toolkit:** speaker view, simulated voice cues (`__deck.hear`), editor save and reload, and half and double speed.
+- **Toolkit:** speaker view, simulated voice cues (`__deck.hear`), editor save and reload, and half and double speed. For the speaker view (`sv.js`): every panel combination at a few window sizes, previews refit, the script gliding forward and back, the last slide, and a notes edit surviving a reload and Save.
 - **Measured gates:**
   - frame pacing on every set piece (`perf.js`);
   - text contrast of at least 4.5:1 worst-decile, or 3:1 for display type of 60 px and up, judged after a projector simulation;

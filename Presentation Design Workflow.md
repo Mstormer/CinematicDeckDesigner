@@ -116,12 +116,16 @@ Craft:
   source into world, motion, sound and type parts, and keep a progress log on long jobs.
 Presenter toolkit (all built in):
 - Keys: → / space / clicker to advance builds and slides, ← back, number + Enter to jump,
-  O overview, N notes, S speaker view in a second window (current, next, notes, timer),
-  M sound, F fullscreen, B blank.
+  O overview, N notes, S speaker view in a second window, M sound, F fullscreen, B blank.
+- Speaker view: use the skill's reference/speaker-view.js unchanged (makeSpeaker plus a small
+  adapter), so it matches every other deck: notes as one running script with bullets, red >
+  marks and cue colours (this slide green, later slides red), a "Heard:" line while voice
+  listens, Now and Next previews, panel toggles, A−/A+, a layout button (right, bottom, left, top, hidden), drag
+  sizing, and Edit notes in place (saved into the file with the editor's Save).
 - Voice cues: Web Speech recognition advances builds when I say the cue word; I can
   double-click any word in my notes to make it a cue.
 - Timing panel: per-slide target times and auto-advance from my speaking pace.
-- Editor (E): edit any text in place, drag and resize elements, global and per-slide
+- Editor (E): edit any text in place, drag and resize elements (A−/A+ or Alt+−/Alt+= by 5%), global and per-slide
   animation speed, then save back into the same HTML file (with a download fallback).
 Name the file "<Talk title> - <World name>.html" in the folder I give you. Never overwrite
 an existing file; new versions get new names. Don't publish it anywhere.
@@ -134,8 +138,8 @@ Run the deck in headless Chrome (Playwright) and fix what you find before showin
 - Hold the frame before and after every landing where a moving object is swapped for a copy:
   no change in colour, size or angle. Look for lines in the sky and ground on every slide,
   settled and in motion, at several window sizes.
-- Test the toolkit: speaker view, voice cue simulation, editor save and reload, half and
-  double speed.
+- Test the toolkit: speaker view (every panel combination, scrolling, a notes edit that
+  survives a reload), voice cue simulation, editor save and reload, half and double speed.
 - Measure: frame pacing, text contrast after a projector simulation, a sound walk (no tones,
   climax loudest, sacred moments silent), audio-picture sync, reduced motion, phone, QR
   decode, wording unchanged.
