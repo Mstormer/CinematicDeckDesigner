@@ -15,6 +15,8 @@ One talk, one world. You turn the user's manuscript into a single self-contained
 - `engine-notes.md`: hard-won rules. **Read it before building.**
 - `speaker-view.js`: the speaker view every deck uses, pasted in unchanged (see Stage 5).
 - `deck-save.js`: saving the deck back into its own file, pasted in unchanged (see Stage 5).
+- `deck-ui.js`: the presenting controls (HUD, notes lower third, timing panel, help, slides overlay, voice cues, keys), pasted in unchanged.
+- `deck-editor.js`: the slide editor, pasted in unchanged; deck-specific controls plug in as extra sections.
 
 Work in the stages below. Stop and wait for the user only where it says **WAIT**. Ask questions in plain chat (or with AskUserQuestion when it is available), each with 2–4 options and your recommendation first.
 
@@ -135,7 +137,7 @@ Pick typefaces that fit the world, not a house default.
 - **Sound as a mix, not a list of effects:** one acoustic space, stereo placement that follows the picture, a level arc that peaks at the climax, quiet transitions under the set pieces, a soft-clip safety stage, and sounds that land on the picture's contact frame, within about 2 frames. Sacred moments are digital silence.
 - **Budgets:** every transport and set piece at p95 ≤ 18 ms per frame with ≤ 2% of frames over 20 ms, planned for an Iris Xe class laptop GPU, with the file under about 2 MB. No `ctx.filter`, `shadowBlur` or live `getImageData` at runtime; bake heavy textures in idle slices. Every animation has a static end state (`.settled * {animation:none; transition:none}`).
 
-**The presenter toolkit** is required. The speaker view always comes from `reference/speaker-view.js`. For the rest, if a reference deck sits in `reference/private/`, adapt its toolkit rather than rewriting it; `engine-notes.md` says where each piece lives in a deck like it. Otherwise build it to this spec.
+**The presenter toolkit** is required, and it comes from the shared modules so the controls work the same in every deck, whatever its design: `reference/deck-ui.js` (presenting), `reference/deck-editor.js` (editor), `reference/speaker-view.js` and `reference/deck-save.js`. Paste each unchanged and connect it with the adapter its header comment lists; only a deck's own extra editor controls (for example light sliders for a deck with a light image) differ. The speaker view always comes from `reference/speaker-view.js`. For the rest, if a reference deck sits in `reference/private/`, adapt its toolkit rather than rewriting it; `engine-notes.md` says where each piece lives in a deck like it. Otherwise build it to this spec.
 - **Keys:**
   - → / space / clicker: builds, then slides; ← goes back;
   - a number then Enter jumps to that slide;

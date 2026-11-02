@@ -34,6 +34,7 @@ In Claude Code, type `/cinematic-deck-designer` and attach your manuscript or ou
   - `engine-notes.md`: build rules learned the hard way;
   - `speaker-view.js`: the speaker view module every deck uses unchanged;
   - `deck-save.js`: the save module (Save writes straight back to the deck's own file; Save as… makes a copy);
+  - `deck-ui.js` and `deck-editor.js`: the presenting controls and slide editor every deck uses unchanged;
   - `tests/kit/`: the Playwright check kit (layout, motion frames, seams, window sizes, frame pacing, sound walk, audio-picture sync, presenter toolkit, speaker view, saving, phone, reduced motion, contrast, projector simulation, QR, wording). Copy it into your project's `tools/` and run `npm i`.
   - `private/` (optional, never committed): your own reference deck and quality bar, if you keep one.
 - `Presentation Design Workflow.md`: the same workflow as a paste-in prompt, for use without installing the skill.
