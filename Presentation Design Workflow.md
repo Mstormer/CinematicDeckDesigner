@@ -115,6 +115,9 @@ Craft:
 - Work in a lasting project folder (never only /tmp, which a restart wipes), split the
   source into world, motion, sound and type parts, and keep a progress log on long jobs.
 Presenter toolkit (all built in):
+- Presenting controls and editor: use the skill's reference/deck-ui.js and deck-editor.js
+  unchanged, so the controls match every other deck whatever the design. Notes (N) is a
+  lower third (≤150 px, resizable) with the current slide's notes and the next cue.
 - Keys: → / space / clicker to advance builds and slides, ← back, number + Enter to jump,
   O overview, N notes, S speaker view in a second window, M sound, F fullscreen, B blank.
 - Speaker view: use the skill's reference/speaker-view.js unchanged (makeSpeaker plus a small

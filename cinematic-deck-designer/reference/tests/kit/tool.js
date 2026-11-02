@@ -69,10 +69,10 @@ const STUB = () => { window.showSaveFilePicker = async o => ({ name: 'captured.h
     const tgt = await page.evaluate(() => { const s = document.querySelector('#slides > .slide.on'); let best = null, ba = 0; for (const e of s.querySelectorAll('[data-et]')) { const r = e.getBoundingClientRect(), a = r.width * r.height; if (a > ba && e.textContent.trim().length > 6 && getComputedStyle(e).opacity > .5) { ba = a; best = e; } } return best && { key: best.dataset.e, x: best.getBoundingClientRect().left + 8, y: best.getBoundingClientRect().top + best.getBoundingClientRect().height / 2 }; });
     ok(!!tgt, `a text block to edit (${tgt && tgt.key})`);
     await page.mouse.click(tgt.x, tgt.y); await L.sleep(200);
-    await page.evaluate(() => { const r = document.getElementById('ed-sz'); r.value = '1.3'; r.dispatchEvent(new Event('input', { bubbles: true })); });
+    await page.evaluate(() => { const r = document.getElementById('ed-s'); r.value = '130'; r.dispatchEvent(new Event('input', { bubbles: true })); r.dispatchEvent(new Event('change', { bubbles: true })); });
     await L.sleep(600);
     await page.mouse.dblclick(tgt.x, tgt.y); await L.sleep(200);
-    const typing = await page.evaluate(() => !!document.querySelector('.ed-typing'));
+    const typing = await page.evaluate(() => !!document.querySelector('#slides [contenteditable=true]'));
     ok(typing, 'double-click starts typing');
     await page.keyboard.type('TOOLCHECK edit'); await page.keyboard.press('Escape'); await L.sleep(300);
     await page.screenshot({ path: L.path.join(out, 'tool-editor.png') });

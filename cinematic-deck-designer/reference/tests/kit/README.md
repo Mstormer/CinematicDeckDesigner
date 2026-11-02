@@ -24,6 +24,9 @@ Build a deck first: `cd <copy> && python3 -I assemble.py out/mark4.html`.
 | snd.js | `node snd.js <deck.html> <out.json>` | sound log, the sacred slide's silence, master peak, flush | 1 on failure |
 | tool.js | `node tool.js <deck.html> <outdir>` | presenter toolkit end to end | 1 on failure |
 | sv.js | `node sv.js <deck.html> <outdir>` | speaker view: panel toggles, sizing, running script, notes editing | 1 on failure |
+| hud.js | `node hud.js <deck.html> <outdir>` | the HUD (buttons and order), timing panel, help, slide list, voice cue advance | 1 on failure |
+| notes.js | `node notes.js <deck.html> <outdir>` | the notes lower third: ≤150 px, current slide only, next 2 lines, next cue, glide, A−/A+, drag height | 1 on failure |
+| ed.js | `node ed.js <deck.html> <outdir>` | the editor: select inside, side width, corner resize, nudge, Delete hides, undo/redo, Size %, Save labels, no plug-ins unless supplied | 1 on failure |
 | save.js | `node save.js <deck.html> <outdir>` | Save remembers the deck's file, Save as… makes a copy | 1 on failure |
 | phone.js | `node phone.js <deck.html> <outdir>` | phone portrait and landscape, touch | 1 on failure |
 | rm.js | `node rm.js <deck.html> <outdir>` | reduced motion: every step still after 1.5 s | 1 if any moves |

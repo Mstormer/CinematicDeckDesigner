@@ -51,7 +51,7 @@ body.awake #hud,body.edit #hud{opacity:1;pointer-events:auto}body.edit #hud{righ
 #hud button:focus-visible,#help button:focus-visible,#jump button:focus-visible,#cues button:focus-visible,#notes button:focus-visible{outline:2px solid var(--ui-gold);outline-offset:2px}
 #counter{color:var(--ui-mute);padding:0 8px;font-variant-numeric:tabular-nums;white-space:nowrap}body.sound #b-sound{color:var(--ui-leaf)}
 #hint{position:fixed;left:max(20px,env(safe-area-inset-left,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));font:500 14px/1.4 var(--ui-font);color:var(--ui-mute);opacity:0;transition:opacity .4s;z-index:20;pointer-events:none}
-body.awake #hint{opacity:1}body.edit #hint{display:none}@media (max-width:1240px){#hint{display:none}}
+body.awake #hint{opacity:1}body.edit #hint{display:none}@media (max-width:1700px){#hint{display:none}}
 #hint kbd,#help kbd{font:600 12px/1 var(--ui-font);padding:3px 6px;border:1px solid rgba(255,255,255,.16);border-radius:5px;color:var(--ui-ink);background:var(--ui-card)}
 #bar{position:fixed;left:0;bottom:0;height:2px;width:0;background:linear-gradient(90deg,rgba(242,245,240,0),rgba(242,245,240,.95));opacity:.32;box-shadow:0 0 12px rgba(242,245,240,.35);transition:width 1s cubic-bezier(.16,1,.3,1),opacity 1s ease;z-index:5;pointer-events:none}body.nobar #bar,body.edit #bar{display:none}
 #black{position:fixed;inset:0;background:#000;z-index:40;opacity:0;pointer-events:none;transition:opacity .5s}#black.on{opacity:1;pointer-events:auto}
@@ -205,6 +205,7 @@ body.nresize,body.nresize *{cursor:ns-resize!important;user-select:none!importan
   let voiceAt = 0, glideId = 0;
   function flow(smooth) { if (notesEl.hidden) return; const el = scr.querySelector('.seg.now'); if (!el) return;
     const br = scr.getBoundingClientRect(), lh = parseFloat(getComputedStyle(scr).lineHeight) || np.fs * 1.45, er = el.getBoundingClientRect(), target = Math.max(0, er.top - br.top + scr.scrollTop);
+    scr.style.visibility = scr.clientHeight < lh * .9 ? 'hidden' : '';   // dragged too short for a whole line: only the cue line
     // the cut: the current part and the next two lines of this slide's script; past it nothing shows (a taller strip fades on, as the speaker view)
     const after = []; for (let x = el.nextElementSibling; x; x = x.nextElementSibling) after.push(x);
     const ls = lineBoxes(after, lh), endAt = ls.length ? ls[Math.min(1, ls.length - 1)].bottom : er.bottom;
@@ -334,7 +335,7 @@ body.nresize,body.nresize *{cursor:ns-resize!important;user-select:none!importan
     const list = $('cuelist'); list.textContent = '';
     slides.forEach((s, i) => {
       const rows = [{ key: s.id, label: `${i + 1}. ${title(s)}`, cls: 's', arrive: i > 0, s }];
-      for (let k = 1; k <= A.maxStep(s); k++) { const el = stepEl(s, k), txt = ((el && el.textContent) || '').replace(/\s+/g, ' ').trim().slice(0, 48); rows.push({ key: s.id + ':' + k, label: `build ${k}${txt ? ': ' + txt : ''}`, cls: 'b', s, k }); }
+      for (let k = 1; k <= A.maxStep(s); k++) { const el = stepEl(s, k), txt = (el ? (tw => { let o = '', gap = false, blk = null; const blockOf = n => { let e = n.parentElement; while (e && e !== el && /^inline/.test(getComputedStyle(e).display)) e = e.parentElement; return e; }; while (tw.nextNode()) { const n = tw.currentNode; if (n.nodeType === 1) { if (n.tagName === 'BR') gap = true; continue; } const b = blockOf(n); if (o && (gap || b !== blk)) o += ' '; o += n.nodeValue; gap = false; blk = b; } return o; })(document.createTreeWalker(el, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT)) : '').replace(/\s+/g, ' ').trim().slice(0, 48); /* a space where a new line or block starts, so words on separate lines don't run together */ rows.push({ key: s.id + ':' + k, label: `build ${k}${txt ? ': ' + txt : ''}`, cls: 'b', s, k }); }
       rows.forEach(r => {
         const row = document.createElement('div'); row.className = 'r ' + r.cls;
         const id = 'cue-' + r.key.replace(/[^a-z0-9]/gi, '-'), o = T().over[r.key] || {};

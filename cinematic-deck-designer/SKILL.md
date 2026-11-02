@@ -15,8 +15,8 @@ One talk, one world. You turn the user's manuscript into a single self-contained
 - `engine-notes.md`: hard-won rules. **Read it before building.**
 - `speaker-view.js`: the speaker view every deck uses, pasted in unchanged (see Stage 5).
 - `deck-save.js`: saving the deck back into its own file, pasted in unchanged (see Stage 5).
-- `deck-ui.js`: the presenting controls (HUD, notes lower third, timing panel, help, slides overlay, voice cues, keys), pasted in unchanged.
-- `deck-editor.js`: the slide editor, pasted in unchanged; deck-specific controls plug in as extra sections.
+- `deck-ui.js`: the presenting controls (HUD, notes lower third, timing panel, help, slides overlay, voice cues, keys), pasted in unchanged. Notes (N) is a lower third no taller than 150 px by default: only the current slide's notes, formatted like the speaker view, the current part at the top with the next two lines at half strength, gliding up as builds advance, and a cue line that always shows the next cue (the next build's, then the next slide's) so the presenter knows what to say; A−/A+ and a drag handle on its top edge resize it, remembered per browser.
+- `deck-editor.js`: the slide editor, pasted in unchanged. Deck-specific controls (a light image's sliders, animation speed) plug in as `sections`/`targets` and show only when the deck supplies them.
 
 Work in the stages below. Stop and wait for the user only where it says **WAIT**. Ask questions in plain chat (or with AskUserQuestion when it is available), each with 2–4 options and your recommendation first.
 
@@ -169,7 +169,7 @@ Run the deck in headless Chrome with Playwright (`channel:'chrome'`, viewport 19
 - **Errors and layout:** zero console or page errors. Every fully built slide sits inside safe margins with no overlaps or text overflow.
 - **Frames:** screenshot every slide, plus 4–6 frames of each transport and signature moment. Review them as contact sheets made with `tests/kit/sheet.py`, and fix anything awkward, empty or flickering. Look at the images yourself, critically.
 - **Swaps and seams:** hold the frame before and after every landing where a moving object is replaced by a copy, and compare them: no change in colour, size or angle. Look for lines in the sky and ground (`seams.js`) on every slide settled and during each arrival and camera move, at several window sizes (`aspect.js`).
-- **Toolkit:** speaker view, simulated voice cues (`__deck.hear`), editor save and reload, and half and double speed. For the speaker view (`sv.js`): every panel combination at a few window sizes, previews refit, the script gliding forward and back, the last slide, and a notes edit surviving a reload and Save.
+- **Toolkit:** speaker view, simulated voice cues (`__deck.hear`), editor save and reload, and half and double speed. Run the kit's `hud.js`, `notes.js`, `ed.js`, `sv.js`, `save.js` and `tool.js` against the deck: the shared modules must pass them unchanged. For the speaker view (`sv.js`): every panel combination at a few window sizes, previews refit, the script gliding forward and back, the last slide, and a notes edit surviving a reload and Save.
 - **Measured gates:**
   - frame pacing on every set piece (`perf.js`);
   - text contrast of at least 4.5:1 worst-decile, or 3:1 for display type of 60 px and up, judged after a projector simulation;
