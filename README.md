@@ -11,6 +11,16 @@ Every deck comes with:
 - speaker view, voice cues and timing;
 - an in-page editor that saves into the file.
 
+## Easy installation and use
+
+1. Give Claude this GitHub link and tell it to check that it's safe and install it.
+2. Call `/cinematic-deck-designer` and drop in a manuscript. Answer the questions it asks when prompted to steer the design.
+3. Once it creates the presentation, expect to iterate. Tell it: "Make the presentation so impressive that a graphic designer and VFX professional would be blown away." Repeat with the highest-end model available until the quality is good enough to use.
+
+I use Opus 5.5 at max effort a few times for this. You can also try setting a `/goal` to run overnight, creating iterations until it's perfect.
+
+> **Note:** Tell it to clear cache and temp files as it goes, or it can fill up 50 GB of space as it screenshots and checks each animation frame by frame.
+
 ## Install
 
 ```bash
